@@ -10,16 +10,35 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        // User::factory(10)->create();
+public function run(): void
+{
+    $organik   = WasteCategory::create(['name' => 'Organik']);
+    $anorganik = WasteCategory::create(['name' => 'Anorganik']);
+    $lainnya   = WasteCategory::create(['name' => 'Lainnya']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+    $organik->wasteTypes()->create([
+        'label' => 'biological', 'name' => 'Sisa Makanan/Organik',
+        'disposal_tip' => 'Bisa dijadikan kompos.',
+    ]);
+
+    foreach ([
+        ['plastic', 'Plastik'], ['glass', 'Kaca'], ['metal', 'Logam'],
+        ['paper', 'Kertas'], ['cardboard', 'Kardus'],
+    ] as [$label, $name]) {
+        $anorganik->wasteTypes()->create([
+            'label' => $label, 'name' => $name,
+            'disposal_tip' => 'Bersihkan, lalu setor ke bank sampah atau tempat daur ulang.',
         ]);
     }
+
+    foreach ([
+        ['battery', 'Baterai'], ['clothes', 'Pakaian'],
+        ['shoes', 'Sepatu'], ['trash', 'Residu'],
+    ] as [$label, $name]) {
+        $lainnya->wasteTypes()->create([
+            'label' => $label, 'name' => $name,
+            'disposal_tip' => 'Buang di tempat khusus atau tempat sampah residu.',
+        ]);
+    }
+}
 }

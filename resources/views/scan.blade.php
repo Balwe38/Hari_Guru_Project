@@ -3,75 +3,79 @@
 @section('title', 'Scan Sampah - EcoScan AI')
 
 @section('header')
-    <h1 class="mt-3 text-2xl font-bold">Scan Sampah</h1>
-    <p class="text-sm">Unggah gambar sampah untuk mengetahui jenis dan kategorinya.</p>
+    <h1 class="text-2xl font-bold sm:text-3xl lg:text-4xl">Scan Sampah</h1>
+    <p class="text-sm sm:text-base">Unggah gambar sampah untuk mengetahui jenis dan kategorinya.</p>
 @endsection
 
 @section('content')
-    <form action="{{ route('scan.store') }}" method="POST" enctype="multipart/form-data"
-          class="rounded-2xl border border-green-200 bg-white p-4 text-center">
-        @csrf
+    <div class="grid gap-6 lg:grid-cols-3">
 
-        @if ($errors->any())
-            <div class="mb-3 rounded-lg bg-red-100 p-3 text-left text-sm text-red-700">
-                {{ $errors->first() }}
-            </div>
-        @endif
+        {{-- Form scan --}}
+        <form action="{{ route('scan.store') }}" method="POST" enctype="multipart/form-data"
+              class="rounded-2xl border border-green-200 bg-white p-5 text-center shadow-sm sm:p-6 lg:col-span-2">
+            @csrf
 
-        <h2 class="text-lg font-semibold text-green-800">Upload Gambar Sampah</h2>
-        <p class="mb-3 text-xs text-gray-500">Pilih gambar sampah dengan jelas agar AI dapat mengenalinya.</p>
+            @if ($errors->any())
+                <div class="mb-3 rounded-lg bg-red-100 p-3 text-left text-sm text-red-700">
+                    {{ $errors->first() }}
+                </div>
+            @endif
 
-        <input type="file" name="image" id="image" accept="image/png,image/jpeg" class="hidden">
+            <h2 class="text-lg font-semibold text-green-800 sm:text-xl">Upload Gambar Sampah</h2>
+            <p class="mb-4 text-xs text-gray-500 sm:text-sm">Pilih gambar sampah dengan jelas agar AI dapat mengenalinya.</p>
 
-        <div id="menu">
-            <button type="button" id="btnPick"
-                    class="w-full rounded-lg border border-green-600 py-4">
-                <span class="block font-semibold">Pilih Gambar</span>
-                <span class="text-xs text-gray-500">JPG, JPEG, atau PNG</span>
-            </button>
+            <input type="file" name="image" id="image" accept="image/png,image/jpeg" class="hidden">
 
-            <p class="my-2 text-xs text-gray-500">ATAU</p>
-
-            <button type="button" id="btnCamera"
-                    class="w-full rounded-lg bg-green-800 py-3 text-sm font-semibold text-white">
-                Buka Kamera
-            </button>
-        </div>
-
-        {{-- Tampilan kamera langsung --}}
-        <div id="cameraBox" class="hidden">
-            <video id="video" autoplay playsinline muted class="w-full rounded-lg bg-black"></video>
-            <div class="mt-3 flex gap-2">
-                <button type="button" id="btnSnap"
-                        class="flex-1 rounded-lg bg-green-800 py-3 text-sm font-semibold text-white">
-                    Ambil Foto
+            <div id="menu" class="grid gap-3 sm:grid-cols-2">
+                <button type="button" id="btnPick"
+                        class="rounded-lg border border-green-600 py-4 hover:bg-green-50">
+                    <span class="block font-semibold">Pilih Gambar</span>
+                    <span class="text-xs text-gray-500">JPG, JPEG, atau PNG</span>
                 </button>
-                <button type="button" id="btnCancel"
-                        class="flex-1 rounded-lg border border-gray-300 py-3 text-sm font-semibold">
-                    Batal
+
+                <button type="button" id="btnCamera"
+                        class="rounded-lg bg-green-800 py-4 text-sm font-semibold text-white hover:bg-green-700">
+                    Buka Kamera
                 </button>
             </div>
-        </div>
 
-        <canvas id="canvas" class="hidden"></canvas>
+            {{-- Tampilan kamera langsung --}}
+            <div id="cameraBox" class="hidden">
+                <video id="video" autoplay playsinline muted
+                       class="mx-auto max-h-[60vh] w-full rounded-lg bg-black"></video>
+                <div class="mt-3 flex gap-2">
+                    <button type="button" id="btnSnap"
+                            class="flex-1 rounded-lg bg-green-800 py-3 text-sm font-semibold text-white">
+                        Ambil Foto
+                    </button>
+                    <button type="button" id="btnCancel"
+                            class="flex-1 rounded-lg border border-gray-300 py-3 text-sm font-semibold">
+                        Batal
+                    </button>
+                </div>
+            </div>
 
-        <div id="previewBox" class="mt-4 hidden">
-            <img id="preview" class="mx-auto max-h-64 rounded-lg" alt="Preview">
-        </div>
+            <canvas id="canvas" class="hidden"></canvas>
 
-        <button type="submit" id="submitBtn"
-                class="mt-4 hidden w-full rounded-lg bg-green-600 py-3 font-semibold text-white">
-            Scan Gambar Ini
-        </button>
-    </form>
+            <div id="previewBox" class="mt-5 hidden">
+                <img id="preview" class="mx-auto max-h-72 rounded-lg sm:max-h-96" alt="Preview">
+            </div>
 
-    <div class="rounded-2xl bg-green-100 p-4 text-sm text-green-900">
-        <p class="mb-1 font-semibold">Tips Scanning</p>
-        <ul class="list-disc space-y-1 pl-5 text-xs">
-            <li>Pastikan pencahayaan cukup.</li>
-            <li>Foto satu jenis sampah saja dalam satu gambar.</li>
-            <li>Dekatkan kamera agar objek terlihat jelas.</li>
-        </ul>
+            <button type="submit" id="submitBtn"
+                    class="mt-5 hidden w-full rounded-lg bg-green-600 py-3 font-semibold text-white hover:bg-green-500">
+                Scan Gambar Ini
+            </button>
+        </form>
+
+        {{-- Tips --}}
+        <aside class="h-fit rounded-2xl bg-green-100 p-5 text-sm text-green-900">
+            <p class="mb-2 font-semibold">Tips Scanning</p>
+            <ul class="list-disc space-y-1 pl-5 text-xs sm:text-sm">
+                <li>Pastikan pencahayaan cukup.</li>
+                <li>Foto satu jenis sampah saja dalam satu gambar.</li>
+                <li>Dekatkan kamera agar objek terlihat jelas.</li>
+            </ul>
+        </aside>
     </div>
 
     <script>
@@ -98,7 +102,6 @@
             menu.classList.remove('hidden');
         }
 
-        // Pilih file dari galeri / komputer
         document.getElementById('btnPick').addEventListener('click', () => {
             input.removeAttribute('capture');
             input.click();
@@ -108,10 +111,8 @@
             if (input.files[0]) showPreview(input.files[0]);
         });
 
-        // Buka kamera
         document.getElementById('btnCamera').addEventListener('click', async () => {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                // Fallback (misalnya HP yang membuka lewat http://IP-laptop)
                 input.setAttribute('capture', 'environment');
                 input.click();
                 return;
@@ -130,7 +131,6 @@
             }
         });
 
-        // Ambil foto dari kamera
         document.getElementById('btnSnap').addEventListener('click', () => {
             canvas.width  = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -140,7 +140,7 @@
                 const file = new File([blob], 'kamera.jpg', { type: 'image/jpeg' });
                 const dt = new DataTransfer();
                 dt.items.add(file);
-                input.files = dt.files;   // masukkan ke input supaya ikut terkirim
+                input.files = dt.files;
                 showPreview(file);
                 stopCamera();
             }, 'image/jpeg', 0.9);

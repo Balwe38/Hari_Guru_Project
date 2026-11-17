@@ -20,6 +20,10 @@
                        class="{{ request()->routeIs('scan*') ? 'underline underline-offset-8' : 'opacity-80 hover:opacity-100' }}">
                         Scan
                     </a>
+                    <a href="{{ route('achievements') }}"
+                       class="{{ request()->routeIs('achievements') ? 'underline underline-offset-8' : 'opacity-80 hover:opacity-100' }}">
+                        Pencapaian
+                    </a>
                 </div>
             </nav>
 

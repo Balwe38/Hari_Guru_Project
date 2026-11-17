@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Achievement;
+use App\Models\EcoProfile;
 use App\Models\Scan;
+use App\Services\GamificationService;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(GamificationService $gamification)
     {
         $hitung = fn ($kategori) => Scan::whereHas(
             'wasteType.category',
@@ -26,6 +29,11 @@ class DashboardController extends Controller
                 'kategori' => $s->wasteType->category->name ?? '-',
             ]);
 
-        return view('dashboard', compact('stats', 'recent'));
+        $eco = $gamification->progress(EcoProfile::current());
+
+        $achievementsUnlocked = Achievement::whereNotNull('unlocked_at')->count();
+        $achievementsTotal    = Achievement::count();
+
+        return view('dashboard', compact('stats', 'recent', 'eco', 'achievementsUnlocked', 'achievementsTotal'));
     }
 }

@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Pencapaian - EcoScan AI')
@@ -67,16 +68,15 @@
 
         </div>
 
-
         {{-- JALUR LEVEL --}}
         @php
             $levels = [
-                ['level' => 1, 'icon' => '🌱', 'name' => 'Eco Beginner', 'range' => '0–10 scan',    'reward' => 'First Step'],
-                ['level' => 2, 'icon' => '🌿', 'name' => 'Eco Explorer', 'range' => '11–25 scan',   'reward' => 'Eco Explorer'],
-                ['level' => 3, 'icon' => '♻️', 'name' => 'Eco Recycler', 'range' => '26–50 scan',   'reward' => 'Recycle Master'],
-                ['level' => 4, 'icon' => '🌳', 'name' => 'Eco Guardian', 'range' => '51–100 scan',  'reward' => 'Eco Guardian'],
-                ['level' => 5, 'icon' => '🌍', 'name' => 'Eco Hero',     'range' => '101–200 scan', 'reward' => 'Eco Hero'],
-                ['level' => 6, 'icon' => '🏆', 'name' => 'Eco Legend',   'range' => '201+ scan',    'reward' => 'Eco Legend'],
+                ['level' => 1, 'icon' => '🌱', 'name' => 'Eco Beginner', 'range' => '0–10 scan', 'reward' => 'First Step'],
+                ['level' => 2, 'icon' => '🌿', 'name' => 'Eco Explorer', 'range' => '11–25 scan', 'reward' => 'Eco Explorer'],
+                ['level' => 3, 'icon' => '♻️', 'name' => 'Eco Recycler', 'range' => '26–50 scan', 'reward' => 'Recycle Master'],
+                ['level' => 4, 'icon' => '🌳', 'name' => 'Eco Guardian', 'range' => '51–100 scan', 'reward' => 'Eco Guardian'],
+                ['level' => 5, 'icon' => '🌍', 'name' => 'Eco Hero', 'range' => '101–200 scan', 'reward' => 'Eco Hero'],
+                ['level' => 6, 'icon' => '🏆', 'name' => 'Eco Legend', 'range' => '201+ scan', 'reward' => 'Eco Legend'],
             ];
             $currentLevel = (int) $eco['level'];
         @endphp
@@ -132,8 +132,29 @@
             </ol>
         </div>
 
+        {{-- JUDUL QUEST --}}
+        <div class="relative overflow-hidden rounded-3xl border border-green-100 bg-gradient-to-r from-green-50 via-white to-emerald-50 px-6 py-5 shadow-sm">
 
-        {{-- DAFTAR BADGE --}}
+            <div class="pointer-events-none absolute -right-5 -top-8 h-28 w-28 rounded-full bg-green-100/60"></div>
+
+            <div class="relative flex items-center gap-4">
+                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-100 text-3xl">
+                    🏆
+                </div>
+
+                <div>
+                    <h2 class="text-3xl font-extrabold tracking-tight text-green-800">
+                        Quest 🌱
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-500">
+                        Selesaikan tantangan, kumpulkan XP, dan raih semua pencapaian!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {{-- DAFTAR BADGE / QUEST --}}
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
             @foreach ($achievements as $row)

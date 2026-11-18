@@ -749,8 +749,72 @@
 
             </div>
 
+</div>
+
+    
+<!-- Penjelasan Jenis Sampah -->
+<section class="bg-emerald-50 border border-emerald-100 rounded-3xl p-6 mt-6">
+
+    <!-- Header -->
+    <div class="mb-5">
+        <span class="text-xs font-semibold text-emerald-600 uppercase">
+            Edukasi Sampah
+        </span>
+        <h2 class="text-xl font-bold text-gray-900 mt-1">
+            Mengenal Jenis Sampah
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+            Kenali jenis sampah agar lebih mudah memilahnya.
+        </p>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- Organik -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+            <div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                🌱
+            </div>
+            <h3 class="font-bold text-emerald-800 text-base mb-2">
+                Sampah Organik
+            </h3>
+            <p class="text-sm text-gray-500 leading-relaxed">
+                Sampah yang mudah terurai secara alami, seperti sisa makanan,
+                daun kering, kulit buah, dan sayuran.
+            </p>
         </div>
 
+        <!-- Anorganik -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+            <div class="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                ♻️
+            </div>
+            <h3 class="font-bold text-emerald-800 text-base mb-2">
+                Sampah Anorganik
+            </h3>
+            <p class="text-sm text-gray-500 leading-relaxed">
+                Sampah yang dapat didaur ulang atau digunakan kembali,
+                seperti plastik, botol kaca, kertas, dan kaleng.
+            </p>
+        </div>
+
+        <!-- Residu -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+            <div class="w-11 h-11 bg-orange-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                🗑️
+            </div>
+            <h3 class="font-bold text-emerald-800 text-base mb-2">
+                Sampah Residu
+            </h3>
+            <p class="text-sm text-gray-500 leading-relaxed">
+                Sampah yang sulit atau tidak dapat didaur ulang,
+                seperti popok sekali pakai, tisu kotor, dan puntung rokok.
+            </p>
+        </div>
+
+    </div>
+</section>
 
         {{-- FOOTER --}}
         <div class="pb-4 text-center">

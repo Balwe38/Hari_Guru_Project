@@ -61,7 +61,7 @@
                     <div class="text-5xl">✨</div>
 
                     <h2 class="mt-3 text-2xl font-extrabold text-green-900">
-                        +{{ $reward['xp_gained'] + $reward['achievement_xp'] }} XP
+                        +{{ $reward['xp_gained'] + $reward['achievement_xp'] + ($reward['challenge_xp'] ?? 0) }} XP
                     </h2>
                 @endif
 
@@ -87,6 +87,20 @@
                         </div>
 
                         <span class="text-sm font-bold text-amber-600">+{{ $badge['xp_reward'] }}</span>
+                    </div>
+                @endforeach
+
+                {{-- Tantangan selesai --}}
+                @foreach (($reward['challenges'] ?? []) as $ch)
+                    <div class="mt-3 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-left">
+                        <div class="text-3xl">{{ $ch['icon'] }}</div>
+
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Tantangan selesai</p>
+                            <p class="truncate font-bold text-gray-900">{{ $ch['name'] }}</p>
+                        </div>
+
+                        <span class="text-sm font-bold text-emerald-600">+{{ $ch['xp_reward'] }}</span>
                     </div>
                 @endforeach
 

@@ -8,10 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Aplikasi belum punya login, jadi hanya ada satu profil.
-        // Kalau nanti ada login, tambahkan kolom user_id di sini.
         Schema::create('eco_profiles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->unsignedInteger('xp')->default(0);
             $table->unsignedTinyInteger('level')->default(1);
             $table->timestamps();

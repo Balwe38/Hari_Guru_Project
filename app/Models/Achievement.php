@@ -3,21 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Achievement extends Model
 {
     protected $fillable = [
-        'code', 'name', 'description', 'icon',
-        'metric', 'target', 'xp_reward', 'unlocked_at',
+        'code',
+        'name',
+        'description',
+        'icon',
+        'metric',
+        'target',
+        'xp_reward',
+        'rarity',
     ];
 
-    protected function casts(): array
+    public function users(): BelongsToMany
     {
-        return ['unlocked_at' => 'datetime'];
-    }
-
-    public function isUnlocked(): bool
-    {
-        return $this->unlocked_at !== null;
+        return $this->belongsToMany(
+            User::class,
+            'user_achievements'
+        )->withPivot('unlocked_at')
+         ->withTimestamps();
     }
 }

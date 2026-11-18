@@ -132,25 +132,34 @@
             </ol>
         </div>
 
-        {{-- JUDUL QUEST --}}
-        <div class="relative overflow-hidden rounded-3xl border border-green-100 bg-gradient-to-r from-green-50 via-white to-emerald-50 px-6 py-5 shadow-sm">
 
-            <div class="pointer-events-none absolute -right-5 -top-8 h-28 w-28 rounded-full bg-green-100/60"></div>
 
-            <div class="relative flex items-center gap-4">
-                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-100 text-3xl">
-                    🏆
-                </div>
+        {{-- KOLEKSI BADGE --}}
+        @php
+            $rarityMap = [
+                'common'    => ['Umum',       'bg-gray-100 text-gray-600',     'border-gray-200'],
+                'rare'      => ['Langka',     'bg-blue-100 text-blue-700',     'border-blue-300'],
+                'epic'      => ['Epik',       'bg-purple-100 text-purple-700', 'border-purple-300'],
+                'legendary' => ['Legendaris', 'bg-amber-100 text-amber-700',   'border-amber-400'],
+            ];
+            $byRarity = $achievements->groupBy(fn ($row) => $row['achievement']->rarity ?? 'common');
+        @endphp
 
-                <div>
-                    <h2 class="text-3xl font-extrabold tracking-tight text-green-800">
-                        Quest 🌱
-                    </h2>
+        <div class="rounded-3xl border border-green-100 bg-white p-6 shadow-sm">
+            <h2 class="text-xl font-extrabold text-gray-900">Koleksi Badge</h2>
+            <p class="mt-1 text-sm text-gray-500">Makin langka badge-nya, makin sulit didapat.</p>
 
-                    <p class="mt-1 text-sm text-gray-500">
-                        Selesaikan tantangan, kumpulkan XP, dan raih semua pencapaian!
-                    </p>
-                </div>
+            <div class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                @foreach ($rarityMap as $key => [$label, $chip])
+                    @php
+                        $group = $byRarity->get($key, collect());
+                        $got   = $group->filter(fn ($row) => $row['unlocked_at'])->count();
+                    @endphp
+                    <div class="rounded-2xl border border-gray-100 p-4 text-center">
+                        <span class="rounded-full px-3 py-1 text-xs font-bold {{ $chip }}">{{ $label }}</span>
+                        <p class="mt-3 text-2xl font-extrabold text-gray-900">{{ $got }}/{{ $group->count() }}</p>
+                    </div>
+                @endforeach
             </div>
         </div>
 
@@ -160,11 +169,11 @@
             @foreach ($achievements as $row)
                 @php
                     $a = $row['achievement'];
-                    $done = $a->isUnlocked();
+                    $done = $row['unlocked_at'] !== null;
                 @endphp
 
                 <div class="relative overflow-hidden rounded-2xl border p-5 shadow-sm transition
-                            {{ $done ? 'border-green-200 bg-white hover:-translate-y-1 hover:shadow-md' : 'border-gray-100 bg-gray-50' }}">
+                            {{ $done ? $rarityMap[$a->rarity ?? 'common'][2] . ' bg-white hover:-translate-y-1 hover:shadow-md' : 'border-gray-100 bg-gray-50' }}">
 
                     <div class="flex items-start gap-4">
 
@@ -185,13 +194,18 @@
                             <p class="mt-1 text-xs leading-relaxed {{ $done ? 'text-gray-500' : 'text-gray-400' }}">
                                 {{ $a->description }}
                             </p>
+
+                            @php $rar = $rarityMap[$a->rarity ?? 'common']; @endphp
+                            <span class="mt-2 inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold {{ $rar[1] }}">
+                                {{ $rar[0] }}
+                            </span>
                         </div>
                     </div>
 
                     <div class="mt-4">
                         @if ($done)
                             <p class="text-xs font-semibold text-green-700">
-                                +{{ $a->xp_reward }} XP · terbuka {{ $a->unlocked_at->format('d M Y') }}
+                                +{{ $a->xp_reward }} XP · terbuka {{ $row['unlocked_at']->format('d M Y') }}
                             </p>
                         @else
                             <div class="mb-1 flex justify-between text-[11px] text-gray-400">

@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             WasteSeeder::class,
             AchievementSeeder::class,
+            RewardSeeder::class,
         ]);
     }
 }

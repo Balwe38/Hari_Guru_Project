@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ScanController extends Controller
 {
-    private const MIN_CONFIDENCE = 80; // di bawah ini dianggap "tidak dikenali"
+    private const MIN_CONFIDENCE = 80;
 
     public function index()
     {
@@ -24,18 +24,24 @@ class ScanController extends Controller
             'confidence' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $file       = $request->file('image');
-        $hash       = sha1_file($file->getRealPath());
-        $duplicate  = Scan::where('image_hash', $hash)->exists();
-        $path       = $file->store('scans', 'public');
+        $file = $request->file('image');
+        $hash = sha1_file($file->getRealPath());
+        $userId = $request->user()->id;
+
+        $duplicate = Scan::where('user_id', $userId)
+            ->where('image_hash', $hash)
+            ->exists();
+
+        $path = $file->store('scans', 'public');
         $confidence = $request->input('confidence');
-        $wasteType  = null;
+        $wasteType = null;
 
         if ($request->filled('label') && $confidence >= self::MIN_CONFIDENCE) {
             $wasteType = WasteType::where('label', $request->input('label'))->first();
         }
 
         $scan = Scan::create([
+            'user_id'       => $userId,
             'waste_type_id' => $wasteType?->id,
             'image_path'    => $path,
             'confidence'    => $confidence,
@@ -51,6 +57,8 @@ class ScanController extends Controller
 
     public function show(Scan $scan)
     {
+        abort_unless($scan->user_id === auth()->id(), 403);
+
         $scan->load('wasteType.category');
 
         return view('hasil', compact('scan'));

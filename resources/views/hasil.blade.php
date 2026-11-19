@@ -174,9 +174,13 @@
 
                         <div class="group relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 p-3">
 
-                            <img src="{{ asset('storage/' . $scan->image_path) }}"
-                                 class="mx-auto h-72 w-full rounded-xl object-contain transition duration-300 group-hover:scale-[1.02] sm:h-80"
-                                 alt="Gambar sampah">
+@if ($scan->image_data)
+    <img src="{{ $scan->image_data }}"
+         class="mx-auto h-72 w-full rounded-xl object-contain transition duration-300 group-hover:scale-[1.02] sm:h-80"
+         alt="Gambar sampah">
+@else
+    <div class="flex h-72 items-center justify-center text-sm text-gray-400 sm:h-80">Foto tidak tersedia</div>
+@endif
 
                             {{-- Image overlay --}}
                             <div class="pointer-events-none absolute inset-x-3 bottom-3 rounded-xl bg-gradient-to-t from-black/40 to-transparent p-4 pt-12">

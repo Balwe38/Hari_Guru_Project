@@ -46,4 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    
 });

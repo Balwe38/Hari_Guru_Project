@@ -12,6 +12,7 @@ class Scan extends Model
         'user_id',
         'waste_type_id',
         'image_path',
+        'image_data',
         'confidence',
         'xp_earned',
         'image_hash',

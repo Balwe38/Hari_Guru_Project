@@ -43,10 +43,14 @@
                        class="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
 
                         <div class="aspect-square overflow-hidden bg-gray-100">
-                            <img src="{{ asset('storage/' . $scan->image_path) }}"
-                                 alt="{{ $scan->wasteType->name ?? 'Tidak dikenali' }}"
-                                 loading="lazy"
-                                 class="h-full w-full object-cover transition group-hover:scale-105">
+@if ($scan->image_data)
+    <img src="{{ $scan->image_data }}"
+         alt="{{ $scan->wasteType->name ?? 'Tidak dikenali' }}"
+         loading="lazy"
+         class="h-full w-full object-cover transition group-hover:scale-105">
+@else
+    <div class="flex h-full w-full items-center justify-center text-xs text-gray-400">Tanpa foto</div>
+@endif
                         </div>
 
                         <div class="space-y-2 p-4">

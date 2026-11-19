@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'yolo' => [
+        // URL server deteksi objek YOLO (folder ai-server). Boleh dikosongkan untuk menonaktifkan.
+        'url' => env('ECOSCAN_YOLO_URL', 'http://127.0.0.1:8001'),
+    ],
+
 ];

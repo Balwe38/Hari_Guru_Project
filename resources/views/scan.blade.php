@@ -156,6 +156,11 @@
                         <div id="scanLine"
                              class="pointer-events-none absolute left-0 right-0 top-0 hidden h-1 bg-green-400 shadow-[0_0_15px_rgba(74,222,128,0.9)]">
                         </div>
+
+                        {{-- Kotak deteksi objek (YOLO) --}}
+                        <div id="detBox"
+                             class="pointer-events-none absolute hidden"
+                             style="border:3px solid #22c55e;border-radius:8px;"></div>
                     </div>
                 </div>
 
@@ -305,7 +310,7 @@
                         <span class="flex h-7 w-7 items-center justify-center rounded-full bg-green-100 font-bold text-green-700">
                             2
                         </span>
-                        <span>AI menganalisis gambar</span>
+                        <span>AI mendeteksi objek lalu mengenali jenisnya</span>
                     </div>
 
                     <div class="flex items-center gap-3">
@@ -341,6 +346,11 @@
         const loadingDots = document.getElementById('loadingDots');
         const scanLine    = document.getElementById('scanLine');
         const submitBtn   = document.getElementById('submitBtn');
+        const detBox      = document.getElementById('detBox');
+
+        // Server deteksi objek YOLO (folder ai-server). Jika tidak aktif, scan memakai gambar penuh.
+        const YOLO_URL        = @json(rtrim((string) config('services.yolo.url'), '/'));
+        const YOLO_TIMEOUT_MS = 8000;
 
         let stream = null;
         let tmModel = null;
@@ -353,11 +363,92 @@
             return tmModel;
         }
 
+        // Render gambar ke canvas (mengikuti orientasi EXIF) agar koordinat YOLO konsisten
+        function toCanvas(img, maxSide = 1280) {
+            const k = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+            const c = document.createElement('canvas');
+
+            c.width  = Math.round(img.naturalWidth * k);
+            c.height = Math.round(img.naturalHeight * k);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+
+            return c;
+        }
+
+        // Tahap 1: YOLO mencari objek. Mengembalikan null jika server mati / tidak ada objek.
+        async function detectObject(frame) {
+            if (!YOLO_URL) return null;
+
+            const ctrl  = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), YOLO_TIMEOUT_MS);
+
+            try {
+                const blob = await new Promise(r => frame.toBlob(r, 'image/jpeg', 0.9));
+                const fd   = new FormData();
+
+                fd.append('file', blob, 'scan.jpg');
+
+                const res = await fetch(YOLO_URL + '/api/detect', {
+                    method: 'POST',
+                    body: fd,
+                    signal: ctrl.signal,
+                });
+
+                if (!res.ok) return null;
+
+                const data = await res.json();
+
+                return data.detections && data.detections.length
+                    ? data.detections[0]
+                    : null;
+
+            } catch (err) {
+                console.warn('YOLO tidak tersedia, memakai gambar penuh.', err);
+                return null;
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+
+        // Potong persegi di sekitar objek (Teachable Machine memakai input persegi 224x224)
+        function cropSquare(src, box) {
+            const [x1, y1, x2, y2] = box;
+            const W = src.width, H = src.height;
+
+            const side = Math.min(Math.max(x2 - x1, y2 - y1) * 1.15, W, H);
+            const sx   = Math.min(Math.max((x1 + x2) / 2 - side / 2, 0), W - side);
+            const sy   = Math.min(Math.max((y1 + y2) / 2 - side / 2, 0), H - side);
+
+            const out = document.createElement('canvas');
+
+            out.width = out.height = 224;
+            out.getContext('2d').drawImage(src, sx, sy, side, side, 0, 0, 224, 224);
+
+            return out;
+        }
+
+        function showBox(box, W, H) {
+            const [x1, y1, x2, y2] = box;
+            const cw = preview.clientWidth, ch = preview.clientHeight;
+            const k  = Math.min(cw / W, ch / H);
+            const ox = (cw - W * k) / 2, oy = (ch - H * k) / 2;
+
+            Object.assign(detBox.style, {
+                left:   (ox + x1 * k) + 'px',
+                top:    (oy + y1 * k) + 'px',
+                width:  ((x2 - x1) * k) + 'px',
+                height: ((y2 - y1) * k) + 'px',
+            });
+
+            detBox.classList.remove('hidden');
+        }
+
         async function classify() {
             submitBtn.disabled = true;
 
             document.getElementById('label').value = '';
             document.getElementById('confidence').value = '';
+            detBox.classList.add('hidden');
 
             // Tampilan loading
             aiStatus.textContent = 'AI sedang menganalisis gambar...';
@@ -383,7 +474,20 @@
             try {
                 const model = await getModel();
 
-                const preds = await model.predict(preview);
+                // Tahap 1: deteksi objek (YOLO). Tahap 2: klasifikasi material (Teachable Machine)
+                const frame = toCanvas(preview);
+                const det   = await detectObject(frame);
+
+                let target = preview; // cadangan: gambar penuh
+
+                if (det) {
+                    target = cropSquare(frame, det.box);
+                    showBox(det.box, frame.width, frame.height);
+                }
+
+                console.info('Mode scan:', det ? 'YOLO + Teachable Machine' : 'Teachable Machine (gambar penuh)');
+
+                const preds = await model.predict(target);
 
                 console.table(
                     preds.map(p => [

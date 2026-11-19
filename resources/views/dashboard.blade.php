@@ -751,7 +751,7 @@
 
 </div>
 
-    
+
 <!-- Penjelasan Jenis Sampah -->
 <section class="bg-emerald-50 border border-emerald-100 rounded-3xl p-6 mt-6">
 

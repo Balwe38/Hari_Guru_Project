@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from io import BytesIO
 
@@ -12,8 +13,11 @@ WEIGHTS = ROOT / "models" / "best.pt"
 app = FastAPI(title="EcoScan YOLO Detection API")
 
 # Izinkan halaman Laravel (php artisan serve / XAMPP) memanggil API ini dari browser.
+ALLOWED = [o.strip() for o in os.getenv("ECOSCAN_ALLOWED_ORIGINS", "").split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=ALLOWED,
     allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_methods=["*"],
     allow_headers=["*"],

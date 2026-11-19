@@ -390,6 +390,7 @@
 
                 const res = await fetch(YOLO_URL + '/api/detect', {
                     method: 'POST',
+                    headers: { 'ngrok-skip-browser-warning': '1' },
                     body: fd,
                     signal: ctrl.signal,
                 });

@@ -59,12 +59,7 @@ class WasteSeeder extends Seeder
                 'category' => $lainnya,
                 'tip' => 'Serahkan ke tempat pengumpulan e-waste.',
             ],
-            [
-                'label' => 'medical',
-                'name' => 'Sampah Medis',
-                'category' => $lainnya,
-                'tip' => 'Serahkan ke fasilitas kesehatan.',
-            ],
+
         ];
 
         foreach ($types as $type) {

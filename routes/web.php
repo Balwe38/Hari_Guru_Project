@@ -10,6 +10,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\ScanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminUserController;
 
 // Belum login: login, register, guest
 Route::middleware('guest')->group(function () {
@@ -49,3 +51,18 @@ Route::middleware('auth')->group(function () {
 
     
 });
+
+//admin: dashboard admin
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+            Route::get('/users', [AdminUserController::class, 'index'])
+    ->name('users');
+
+Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])
+    ->name('users.role');
+    });

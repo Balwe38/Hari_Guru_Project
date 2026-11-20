@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ScanController extends Controller
 {
-    private const MIN_CONFIDENCE = 80;
+    private const MIN_CONFIDENCE = 70;
     private const MAX_SIDE = 600;
 
     public function index()

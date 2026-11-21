@@ -1,4 +1,4 @@
-cat > resources/views/admin/dashboard.blade.php <<'BLADE'
+
 @extends('layouts.app')
 
 @section('title', 'Admin Dashboard - EcoScan AI')
@@ -207,4 +207,3 @@ cat > resources/views/admin/dashboard.blade.php <<'BLADE'
     </div>
 </div>
 @endsection
-BLADE

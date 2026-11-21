@@ -16,6 +16,7 @@ use App\Http\Controllers\AdminAchievementController;
 use App\Http\Controllers\AdminRewardController;
 use App\Http\Controllers\AdminScanController;
 use App\Http\Controllers\AdminLeaderboardController;
+use App\Http\Controllers\AdminStatisticsController;
 
 // Belum login: login, register, guest
 Route::middleware('guest')->group(function () {
@@ -105,4 +106,7 @@ Route::delete('/scans/{scan}', [AdminScanController::class, 'destroy'])
 
     Route::get('/leaderboard', [AdminLeaderboardController::class, 'index'])
     ->name('leaderboard');
+
+    Route::get('/statistics', [AdminStatisticsController::class, 'index'])
+    ->name('statistics');
     });

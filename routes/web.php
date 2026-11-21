@@ -12,6 +12,7 @@ use App\Http\Controllers\ScanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminAchievementController;
 
 // Belum login: login, register, guest
 Route::middleware('guest')->group(function () {
@@ -68,4 +69,13 @@ Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])
 
     Route::patch('/users/{user}/progress', [AdminUserController::class, 'updateProgress'])
     ->name('users.progress');
+
+    Route::get('/achievements', [AdminAchievementController::class, 'index'])
+    ->name('achievements');
+
+Route::patch('/achievements/{user}/{achievement}/unlock', [AdminAchievementController::class, 'unlock'])
+    ->name('achievements.unlock');
+
+Route::delete('/achievements/{user}/{achievement}/reset', [AdminAchievementController::class, 'reset'])
+    ->name('achievements.reset');
     });

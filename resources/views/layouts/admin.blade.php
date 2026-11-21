@@ -15,7 +15,7 @@
 <div class="min-h-screen lg:flex">
 
     {{-- SIDEBAR --}}
-    <aside class="w-full shrink-0 bg-slate-950 text-white lg:min-h-screen lg:w-64">
+    <aside class="w-full shrink-0 bg-green-800 text-white lg:min-h-screen lg:w-64">
 
         <div class="flex h-full flex-col">
 
@@ -24,9 +24,9 @@
                 <a href="{{ route('admin.dashboard') }}"
                    class="flex items-center gap-3">
 
-                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500 text-xl shadow-lg shadow-emerald-500/20">
-                        ♻
-                    </div>
+                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-xl text-green-800 shadow-lg">
+    ♻
+</div>
 
                     <div>
                         <p class="text-lg font-black tracking-tight">

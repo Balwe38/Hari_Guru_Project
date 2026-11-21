@@ -1,7 +1,8 @@
 
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Admin Dashboard - EcoScan AI')
+@section('page_title', 'Dashboard')
 
 @section('content')
 <div class="min-h-screen bg-slate-50 p-6">

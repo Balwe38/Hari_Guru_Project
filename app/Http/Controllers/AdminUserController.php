@@ -31,4 +31,30 @@ class AdminUserController extends Controller
 
         return back()->with('success', "Role {$user->name} berhasil diubah menjadi {$request->role}.");
     }
+
+    public function updateProgress(Request $request, User $user)
+{
+    $request->validate([
+        'xp' => ['required', 'integer', 'min:0', 'max:999999'],
+        'level' => ['required', 'integer', 'min:1', 'max:999'],
+    ]);
+
+    $profile = $user->ecoProfile()->firstOrCreate(
+        [],
+        [
+            'xp' => 0,
+            'level' => 1,
+        ]
+    );
+
+    $profile->update([
+        'xp' => $request->xp,
+        'level' => $request->level,
+    ]);
+
+    return back()->with(
+        'success',
+        "Progress {$user->name} berhasil diperbarui."
+    );
+}
 }

@@ -65,4 +65,7 @@ Route::middleware(['auth', 'admin'])
 
 Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])
     ->name('users.role');
+
+    Route::patch('/users/{user}/progress', [AdminUserController::class, 'updateProgress'])
+    ->name('users.progress');
     });

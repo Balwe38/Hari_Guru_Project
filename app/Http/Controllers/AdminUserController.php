@@ -7,12 +7,24 @@ use Illuminate\Http\Request;
 
 class AdminUserController extends Controller
 {
-    public function index()
-    {
-        $users = User::latest()->paginate(15);
+public function index(Request $request)
+{
+    $search = trim($request->input('search', ''));
 
-        return view('admin.users.index', compact('users'));
-    }
+    $users = User::query()
+        ->with('ecoProfile')
+        ->when($search !== '', function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        })
+        ->latest()
+        ->paginate(15)
+        ->withQueryString();
+
+    return view('admin.users.index', compact('users', 'search'));
+}
 
     public function updateRole(Request $request, User $user)
     {

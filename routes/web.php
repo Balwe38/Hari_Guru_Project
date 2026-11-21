@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminAchievementController;
+use App\Http\Controllers\AdminRewardController;
 
 // Belum login: login, register, guest
 Route::middleware('guest')->group(function () {
@@ -78,4 +79,19 @@ Route::patch('/achievements/{user}/{achievement}/unlock', [AdminAchievementContr
 
 Route::delete('/achievements/{user}/{achievement}/reset', [AdminAchievementController::class, 'reset'])
     ->name('achievements.reset');
+
+    Route::get('/rewards', [AdminRewardController::class, 'index'])
+    ->name('rewards');
+
+Route::post('/rewards', [AdminRewardController::class, 'store'])
+    ->name('rewards.store');
+
+Route::patch('/rewards/{reward}', [AdminRewardController::class, 'update'])
+    ->name('rewards.update');
+
+Route::patch('/rewards/{reward}/toggle', [AdminRewardController::class, 'toggle'])
+    ->name('rewards.toggle');
+
+Route::delete('/rewards/{reward}', [AdminRewardController::class, 'destroy'])
+    ->name('rewards.destroy');
     });
